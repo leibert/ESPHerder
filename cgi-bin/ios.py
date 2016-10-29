@@ -46,7 +46,8 @@ if "mode" in cgiinput: #mode/funciton selection
                 urlresponse=urllib.urlopen(url)
                 urlresponse=urlresponse.read()
                 print urlresponse
-                # data = ast.literal_eval(urlresponse)
+        except:
+            False
 
 
 
