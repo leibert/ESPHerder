@@ -29,8 +29,10 @@ function buildUI(data) {
 
     }
 
+    addOverlordFunctions();
 
     $('#panel').html(UIhtml);
+    finalizeClientJS();
 
 }
 
@@ -62,17 +64,46 @@ function addUIelement(type, espid, chid) {
         window.console.log("RGB controller");
         UIhtml +=
             "<BR>"+
-            "<a href='#' class='btn green' onclick='lightsfullON(\""+espid + "\",\"" + chid + "\")'>CLICK TO TURN LIGHTS</a>"+
-            "<a href='#' class='btn red' onclick='lightsfullOFF(\"" + espid + "\",\"" + chid + "\")'>CLICK TO TURN LIGHTS OFF</a>"+
+            "<a href='#' class='btn green' onclick='ON(\""+espid + "\",\"" + chid + "\")'>CLICK TO TURN LIGHTS</a>"+
+            "<a href='#' class='btn red' onclick='OFF(\"" + espid + "\",\"" + chid + "\")'>CLICK TO TURN LIGHTS OFF</a>"+
             "<BR><BR>"+
-            "<input type='range' onchange='RedLightDIM(this.value,\"" + espid + "\",\"" + chid + "\")' min='1' max = '99' style='height: 50px' value='50'>"+
+            "<input type='range' onchange='RedLightDIM(this.value,\"" + espid + "\",\"" + chid + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
             "<BR><BR>"+
-            "<input type='range' onchange='BlueLightDIM(this.value,\"" + espid + "\",\"" + chid + "\")' min='1' max = '99' style='height: 50px' value='50'>"+
+            "<input type='range' onchange='BlueLightDIM(this.value,\"" + espid + "\",\"" + chid + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
             "<BR><BR>"+
-            "<input type='range' onchange='GreenLightDIM(this.value,\"" + espid + "\",\"" + chid + "\")' min='1' max = '99' style='height: 50px' value='50'>"+
+            "<input type='range' onchange='GreenLightDIM(this.value,\"" + espid + "\",\"" + chid + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
             "<BR><BR>";
     }
 }
+
+function addOverlordFunctions(){
+    UIhtml+="<HR><h3>Make things really shitty</h3>";
+    UIhtml+="<br>IP,CH,COMMAND";
+    //add batch processing box
+    UIhtml+="<form id='batchsend' method='post'>" +
+        "<input name='steptime' type='text' value='1000'><br>"+
+        "<textarea name='commands' rows ='50' cols='150'></textarea>"+
+        "<br><input type='submit'>"
+
+}
+
+function finalizeClientJS(){
+
+    var batchform = $('#batchsend');
+    batchform.submit(function (ev) {
+        $.ajax({
+            type: 'POST',
+            url: appPath+'?mode=batch',
+            data: batchform.serialize(),
+            success: function (data) {
+                alert('ok');
+            }
+        });
+
+        ev.preventDefault();
+    });
+}
+
 
 function updateIoSstatus() {
     //run through all ESPs and update their status
@@ -91,27 +122,28 @@ function qsESPch() {
 
 //Scripts loaded, built UI
 
-function lightsfullON(espid, chid) {
-    window.console.log("lights on");
-    espcomm("LIGHTS=ON", espid, chid);
+function ON(espid, chid) {
+    window.console.log("output on");
+    espcomm("ACTION=SWITCHON", espid, chid);
 }
-function lightsfullOFF(espid, chid) {
-    espcomm("LIGHTS=OFF", espid, chid);
+function OFF(espid, chid) {
+    window.console.log("output on")
+    espcomm("ACTION=SWITCHOFF", espid, chid);
 }
 function lightsDIM(value, espid, chid) {
-    espcomm(("DIM" + value), espid, chid);
+    espcomm(("ACTION=DIM" + value), espid, chid);
 }
 
 function RedLightDIM(value, espid, chid) {
-    espcomm(("RDIM" + value), espid, chid);
+    espcomm(("ACTION=RGBSDIM#R" + value), espid, chid);
 }
 
 function GreenLightDIM(value, espid, chid) {
-    espcomm(("GDIM" + value), espid, chid);
+    espcomm(("ACTION=RGBSDIM#G" + value), espid, chid);
 }
 
 function BlueLightDIM(value) {
-    espcomm(("BDIM" + value), espid, chid);
+    espcomm(("ACTION=RGBSDIM#B" + value), espid, chid);
 }
 
 
@@ -124,7 +156,7 @@ function espcomm(data, espid, chid) {
     window.console.log("sending" + data);
     $.ajax({
         type: "GET",
-        url: appPath = "?mode=xact&espid=" + espid + "&ch=" + chid,
+        url: appPath + "?mode=xact&ESPID=" + espid + "&CH=" + chid,
         data: data,
         success: ESPsuccess
 
@@ -137,6 +169,9 @@ initClient();
 
 $('#fallback').hide();
 $('#panel').html("Looking for crappy things...probably everything is broken");
+
+
+
 
 //function getBaseUrl() {
 var re = new RegExp(/^.*\//);

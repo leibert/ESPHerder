@@ -6,7 +6,8 @@
         <serverdata>
           <mappings>
             <mapping deploy="/IOS" local="$PROJECT_DIR$" web="/" />
-            <mapping deploy="/cgi-bin/IOS" local="$PROJECT_DIR$/cgi-bin" web="/cgi-bin/IOS" />
+            <mapping deploy="/cgi-bin/IOS/" local="$PROJECT_DIR$/cgi-bin" web="/cgi-bin/IOS" />
+            <mapping deploy="/espserve" local="$PROJECT_DIR$/espserve" web="/" />
           </mappings>
         </serverdata>
       </paths>
