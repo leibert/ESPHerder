@@ -34,14 +34,23 @@ var complexswitch=" \
 
 
 var RGBcontroller="<BR>"+
-            "<a href='#' class='btn green' onclick='ON(\""+espid + "\",\"" + chid + "\")'>CLICK TO TURN LIGHTS</a>"+
-            "<a href='#' class='btn red' onclick='OFF(\"" + espid + "\",\"" + chid + "\")'>CLICK TO TURN LIGHTS OFF</a>"+
+            "<a href='#' class='btn green' onclick='ON(\""+espid + "\",\"" + 1 + "\")'>CLICK TO TURN LIGHTS</a>"+
+            "<a href='#' class='btn red' onclick='OFF(\"" + espid + "\",\"" + 1 + "\")'>CLICK TO TURN LIGHTS OFF</a>"+
             "<BR><BR>"+
-            "<input type='range' onchange='RedLightDIM(this.value,\"" + espid + "\",\"" + chid + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
+            "<input type='range' onchange='RedLightDIM(this.value,\"" + espid + "\",\"" + 1 + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
             "<BR><BR>"+
-            "<input type='range' onchange='BlueLightDIM(this.value,\"" + espid + "\",\"" + chid + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
+            "<input type='range' onchange='BlueLightDIM(this.value,\"" + espid + "\",\"" + 1 + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
             "<BR><BR>"+
-            "<input type='range' onchange='GreenLightDIM(this.value,\"" + espid + "\",\"" + chid + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
+            "<input type='range' onchange='GreenLightDIM(this.value,\"" + espid + "\",\"" + 1 + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
+            "<BR><BR>"+
+            "<a href='#' class='btn green' onclick='ON(\""+espid + "\",\"" + 2 + "\")'>CLICK TO TURN LIGHTS</a>"+
+            "<a href='#' class='btn red' onclick='OFF(\"" + espid + "\",\"" + 2 + "\")'>CLICK TO TURN LIGHTS OFF</a>"+
+            "<BR><BR>"+
+            "<input type='range' onchange='RedLightDIM(this.value,\"" + espid + "\",\"" + 2 + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
+            "<BR><BR>"+
+            "<input type='range' onchange='BlueLightDIM(this.value,\"" + espid + "\",\"" + 2 + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
+            "<BR><BR>"+
+            "<input type='range' onchange='GreenLightDIM(this.value,\"" + espid + "\",\"" + 2 + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
             "<BR><BR>";
 
 
@@ -82,7 +91,7 @@ function espcomm(data, espid, chid) {
     window.console.log("sending" + data);
     $.ajax({
         type: "GET",
-        url: appPath + "?mode=xact&ESPID=" + espid + "&CH=" + chid,
+        url: "CH=" + chid,
         data: data,
         success: ESPsuccess
 
@@ -99,6 +108,7 @@ $('#panel').html(RGBcontroller);
 //function getBaseUrl() {
 var re = new RegExp(/^.*\//);
 var controlleraddress= re.exec(window.location.href);
+var espid=controlleraddress;
 window.console.log("THIS IS UNIT"+controlleraddress);
 //}
 

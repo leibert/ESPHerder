@@ -23,8 +23,11 @@ function buildUI(data) {
 
     for (var i = 0; i < json.ESPDB.length; i++) {
         var obj = json.ESPDB[i];
-        console.log(obj.espid);
-        if (!obj.espid.contains("IOS")) //check to see if this is an actual node with an IP address
+        window.console.log(obj.espid);
+
+        if (obj.espid.indexOf("IOS")!=-1) //check to see if this is an actual node with an IP address
+            window.console.log("MASTERID")
+        else
             addESP(obj); //create a UI element based on this object
 
     }
@@ -56,6 +59,13 @@ function addESPchannel(chobj, espid, chid) {
 function addUIelement(type, espid, chid) {
     if (type == "SWITCH") {
         window.console.log("SWITCH");
+         UIhtml +=
+            "<BR>"+
+            "<a href='#' class='btn green' onclick='ON(\""+espid + "\",\"" + chid + "\")'>CLICK TO TURN LIGHTS</a>"+
+            "<a href='#' class='btn red' onclick='OFF(\"" + espid + "\",\"" + chid + "\")'>CLICK TO TURN LIGHTS OFF</a>"+
+            "<BR><BR>"
+
+
     }
     else if (type == "DIMLIGHT") {
         window.console.log("DIMMER LIGHT");
@@ -65,7 +75,7 @@ function addUIelement(type, espid, chid) {
         UIhtml +=
             "<BR>"+
             "<a href='#' class='btn green' onclick='ON(\""+espid + "\",\"" + chid + "\")'>CLICK TO TURN LIGHTS</a>"+
-            "<a href='#' class='btn red' onclick='OFF(\"" + espid + "\",\"" + chid + "\")'>CLICK TO TURN LIGHTS OFF</a>"+
+            "<br><a href='#' class='btn red' onclick='OFF(\"" + espid + "\",\"" + chid + "\")'>CLICK TO TURN LIGHTS OFF</a>"+
             "<BR><BR>"+
             "<input type='range' onchange='RedLightDIM(this.value,\"" + espid + "\",\"" + chid + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
             "<BR><BR>"+
@@ -142,7 +152,7 @@ function GreenLightDIM(value, espid, chid) {
     espcomm(("ACTION=RGBSDIM#G" + value), espid, chid);
 }
 
-function BlueLightDIM(value) {
+function BlueLightDIM(value, espid, chid) {
     espcomm(("ACTION=RGBSDIM#B" + value), espid, chid);
 }
 
