@@ -7,9 +7,31 @@ import cgitb, cgi
 import urllib, json, ast
 import ESPs
 import os, time
+import thread
 from time import sleep
 
 cgitb.enable()
+
+
+
+
+
+def sendESPcommand(IP,CH,Action):
+    thread.start_new_thread(sendESPcommandworker, (IP,CH,action))
+
+
+def sendESPcommandworker(IP,CH,Action):
+    try:
+            print "<br>thread sending command to"+IP
+            url = "http://" + IP + "/?CH=" + CH+"&ACTION="+Action
+            print url
+            urllib.urlcleanup()
+            urlresponse = urllib.urlopen(url)
+            # print urlresponse
+            # urlresponse = urlresponse.read()
+            # print urlresponse
+    except:
+        False
 
 print "Content-type: text/html\n\n"
 # print "HELLO FROM IOS.py"
@@ -55,6 +77,20 @@ if "mode" in cgiinput:  # mode/funciton selection
             print urlresponse
         except:
             False
+
+    elif cgiinput.getvalue("mode") == 'loadmarcos':
+        print "load macros"
+        d= {}
+        try:
+            with open('resources/macros.dat', 'r') as file:
+                for line in file:
+                    (key, val) = line.split(',')
+                    d[key] = val
+        except:
+            False
+
+
+
     elif cgiinput.getvalue("mode") == 'batch':
         print "yikes, lets try this"
         #write a file with a timestamp, serves as lock file
@@ -104,17 +140,7 @@ if "mode" in cgiinput:  # mode/funciton selection
                     # print IP
                     # print CH
                     # print action
-                    try:
-                        # print "<br>getting data from"+IP
-                        url = "http://" + IP + "/?CH=" + CH+"&ACTION="+action
-                        print url
-                        urllib.urlcleanup()
-                        urlresponse = urllib.urlopen(url)
-                        # print urlresponse
-                        # urlresponse = urlresponse.read()
-                        # print urlresponse
-                    except:
-                        False
+            sendESPcommand(IP,CH,action)
 
             if not loopflag:
                 locked = False
@@ -138,6 +164,16 @@ if "mode" in cgiinput:  # mode/funciton selection
         #     print urlresponse
         # except:
         #     False
+
+# else:
+#     GET WORLD VIEW
+# UPDATE WEATHER
+# UPDATE MBTA
+# BOTH STORED IN FLAT TEXT FILES
+
+
+# UPDATE SIGN
+#
 
 
 

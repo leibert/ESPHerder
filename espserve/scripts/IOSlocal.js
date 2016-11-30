@@ -39,18 +39,18 @@ var RGBcontroller="<BR>"+
             "<BR><BR>"+
             "<input type='range' onchange='RedLightDIM(this.value,\"" + espid + "\",\"" + 1 + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
             "<BR><BR>"+
-            "<input type='range' onchange='BlueLightDIM(this.value,\"" + espid + "\",\"" + 1 + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
-            "<BR><BR>"+
             "<input type='range' onchange='GreenLightDIM(this.value,\"" + espid + "\",\"" + 1 + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
+            "<BR><BR>"+
+            "<input type='range' onchange='BlueLightDIM(this.value,\"" + espid + "\",\"" + 1 + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
             "<BR><BR>"+
             "<a href='#' class='btn green' onclick='ON(\""+espid + "\",\"" + 2 + "\")'>CLICK TO TURN LIGHTS</a>"+
             "<a href='#' class='btn red' onclick='OFF(\"" + espid + "\",\"" + 2 + "\")'>CLICK TO TURN LIGHTS OFF</a>"+
             "<BR><BR>"+
             "<input type='range' onchange='RedLightDIM(this.value,\"" + espid + "\",\"" + 2 + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
             "<BR><BR>"+
-            "<input type='range' onchange='BlueLightDIM(this.value,\"" + espid + "\",\"" + 2 + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
-            "<BR><BR>"+
             "<input type='range' onchange='GreenLightDIM(this.value,\"" + espid + "\",\"" + 2 + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
+            "<BR><BR>"+
+            "<input type='range' onchange='BlueLightDIM(this.value,\"" + espid + "\",\"" + 2 + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
             "<BR><BR>";
 
 
@@ -66,19 +66,19 @@ function OFF(espid, chid) {
     espcomm("ACTION=SWITCHOFF", espid, chid);
 }
 function lightsDIM(value, espid, chid) {
-    espcomm(("ACTION=LIGHTDIM" + value), espid, chid);
+    espcomm(("ACTION=LIGHTDIM." + value), espid, chid);
 }
 
 function RedLightDIM(value, espid, chid) {
-    espcomm(("ACTION=RGBSDIM#R" + value), espid, chid);
+    espcomm(("ACTION=RGBSDIM.R" + value), espid, chid);
 }
 
 function GreenLightDIM(value, espid, chid) {
-    espcomm(("ACTION=RGBSDIM#G" + value), espid, chid);
+    espcomm(("ACTION=RGBSDIM.G" + value), espid, chid);
 }
 
-function BlueLightDIM(value) {
-    espcomm(("ACTION=RGBSDIM#B" + value), espid, chid);
+function BlueLightDIM(value, espid, chid) {
+    espcomm(("ACTION=RGBSDIM.B" + value), espid, chid);
 }
 
 
@@ -91,8 +91,7 @@ function espcomm(data, espid, chid) {
     window.console.log("sending" + data);
     $.ajax({
         type: "GET",
-        url: "CH=" + chid,
-        data: data,
+        url: "CH=" + chid+"&"+data,
         success: ESPsuccess
 
     });

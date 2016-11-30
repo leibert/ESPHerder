@@ -174,11 +174,13 @@ function espcomm(data, espid, chid) {
 }
 
 
-initClient();
+function scanner() {
+    initClient();
 
 
-$('#fallback').hide();
-$('#panel').html("Looking for crappy things...probably everything is broken");
+    $('#fallback').hide();
+    $('#panel').html("Looking for crappy things...probably everything is broken");
+}
 
 
 
