@@ -21,6 +21,9 @@
 .red{
   background: darkred;
 }
+.blkout{
+    background: black;
+}
 
 .inactive{
   background: #575a5c;
