@@ -22,8 +22,8 @@ var html = "";
 
 function singlePWMcontrollerUIblock(ip, ch) {
     html = "<BR>" +
-        "<a href='#' class='btn green' onclick='ON(\"" + ip + "\",\"" + ch + "\")'>CLICK TO TURN LIGHTS</a>"+
-        "<a href='#' class='btn red' onclick='OFF(\"" + ip + "\",\"" + ch + "\")'>CLICK TO TURN LIGHTS OFF</a>"+
+        "<a href='javascript:void(0)' class='btn green' onclick='ON(\"" + ip + "\",\"" + ch + "\")'>CLICK TO TURN LIGHTS</a>"+
+        "<a href='javascript:void(0)' class='btn red' onclick='OFF(\"" + ip + "\",\"" + ch + "\")'>CLICK TO TURN LIGHTS OFF</a>"+
         "<BR><BR>" +
         "<input type='range' onchange='lightsDIM(this.value)' min='1' max = '99' style='height: 50px' value='50'>"+
         "<BR><BR>";
@@ -33,8 +33,8 @@ function singlePWMcontrollerUIblock(ip, ch) {
 
 function digitalcontrollerUIblock(ip, ch) {
     html = "<BR>" +
-        "<a href='#' class='btn green' onclick='ON(\"" + ip + "\",\"" + ch + "\")'>CLICK TO TURN LIGHTS</a>"+
-        "<a href='#' class='btn red' onclick='OFF(\"" + ip + "\",\"" + ch + "\")'>CLICK TO TURN LIGHTS OFF</a>"+
+        "<a href='javascript:void(0)' class='btn green' onclick='ON(\"" + ip + "\",\"" + ch + "\")'>CLICK TO TURN LIGHTS</a>"+
+        "<a href='javascript:void(0)' class='btn red' onclick='OFF(\"" + ip + "\",\"" + ch + "\")'>CLICK TO TURN LIGHTS OFF</a>"+
         "<BR><BR>";
     return html;
 
@@ -42,8 +42,8 @@ function digitalcontrollerUIblock(ip, ch) {
 
 function RGBcontrollerUIblock(ip, ch) {
     html = "<BR>" +
-        "<a href='#' class='btn green' onclick='ON(\"" + ip + "\",\"" + ch + "\")'>CLICK TO TURN LIGHTS</a>" +
-        "<a href='#' class='btn red' onclick='OFF(\"" + ip + "\",\"" + ch + "\")'>CLICK TO TURN LIGHTS OFF</a>" +
+        "<a href='javascript:void(0)' class='btn green' onclick='ON(\"" + ip + "\",\"" + ch + "\")'>CLICK TO TURN LIGHTS</a>" +
+        "<a href='javascript:void(0)' class='btn red' onclick='OFF(\"" + ip + "\",\"" + ch + "\")'>CLICK TO TURN LIGHTS OFF</a>" +
         "<BR><BR>" +
         "<input type='range' onchange='RedLightDIM(this.value,\"" + ip + "\",\"" + ch + "\")' min='10' max = '99' style='height: 50px' value='50'>" +
         "<BR><BR>" +
@@ -122,7 +122,7 @@ function ESPUIpopulate(data) {
 
 
     }
-    html+="<br><br><br><br><a href='#' class='btn blkout' onclick='ESPblackout()'>BLACKOUT</a>";
+    html+="<br><br><br><br><a href='javascript:void(0)' class='btn blkout' onclick='ESPblackout()'>BLACKOUT</a>";
     html+="</body></html>";
     $('#fallback').hide();
     $('#panel').html(html);
