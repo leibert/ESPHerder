@@ -14,12 +14,13 @@ function initScanner() {
 
 function buildUI(data) {
     window.console.log("in build UI");
-//    window.console.log(data);
-    UIhtml = "DETECTED INTERNET OF SHIT"
+    window.console.log(data);
+    window.console.log("END DATA");
+    UIhtml = "DETECTED INTERNET OF SHIT";
     json = jQuery.parseJSON(data);
     window.console.log(json.ESPDB);
     window.console.log("breaking out individual elements");
-//    window.console.log(ESPdb.ESPDB.length);
+//    window.console.log(ESPDB.length);
 
     for (var i = 0; i < json.ESPDB.length; i++) {
         var obj = json.ESPDB[i];

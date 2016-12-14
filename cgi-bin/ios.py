@@ -177,11 +177,11 @@ if "mode" in cgiinput:  # mode/funciton selection
 
 
 
-else:
-    print "ERROR"
+    else:
+        print "ERROR"
 
-# print "<H3>JSON STR</H3>"
-print responsestr
+    # print "<H3>JSON STR</H3>"
+    print responsestr
 
 def loadMacros():
 
