@@ -135,26 +135,26 @@ function qsESPch() {
 
 function ON(espid, chid) {
     window.console.log("output on");
-    espcomm("ACTION=SWITCHON", espid, chid);
+    espcommremote("ACTION=SWITCHON", espid, chid);
 }
 function OFF(espid, chid) {
     window.console.log("output on")
-    espcomm("ACTION=SWITCHOFF", espid, chid);
+    espcommremote("ACTION=SWITCHOFF", espid, chid);
 }
 function lightsDIM(value, espid, chid) {
-    espcomm(("ACTION=DIM" + value), espid, chid);
+    espcommremote(("ACTION=DIM" + value), espid, chid);
 }
 
 function RedLightDIM(value, espid, chid) {
-    espcomm(("ACTION=RGBSDIM#R" + value), espid, chid);
+    espcommremote(("ACTION=RGBSDIM#R" + value), espid, chid);
 }
 
 function GreenLightDIM(value, espid, chid) {
-    espcomm(("ACTION=RGBSDIM#G" + value), espid, chid);
+    espcommremote(("ACTION=RGBSDIM#G" + value), espid, chid);
 }
 
 function BlueLightDIM(value, espid, chid) {
-    espcomm(("ACTION=RGBSDIM#B" + value), espid, chid);
+    espcommremote(("ACTION=RGBSDIM#B" + value), espid, chid);
 }
 
 
@@ -163,7 +163,7 @@ function ESPsuccess(data) {
 }
 
 
-function espcomm(data, espid, chid) {
+function espcommremote(data, espid, chid) {
     window.console.log("sending" + data);
     $.ajax({
         type: "GET",
