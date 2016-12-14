@@ -2,11 +2,11 @@ var appPath = '/cgi-bin/IOS/ios.py' //path to IOS master
 var UIhtml = '' //holder for eventual html to buld client UI
 var ESPdb //holder for ESP database
 
-function initClient() {
-    window.console.log("initing");
+function initScanner() {
+    window.console.log("initingscanner");
     $.ajax({
         type: "GET",
-        url: appPath + '?mode=init',//get ESP Database
+        url: appPath + '?mode=initscanner',//get ESP Database
         success: buildUI //send database to UI builder
 
     });

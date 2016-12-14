@@ -3,8 +3,9 @@ import sys
 import datetime
 import argparse
 # sys.path.append('/home/leibert/pyScripts')
-sys.path.append('/home/leibert/Documents/gitRepos/IoSMaster/cgi-bin')
-import ios.py
+sys.path.append('/home/leibert/PycharmProjects/IoSMaster/cgi-bin')
+sys.path.append('/var/www/html/cgi-bin/IOS')
+import ios
 
 # sys.path.append('/home/leibert/pyScripts')
 # sys.path.append('/home/leibert/Documents/gitRepos/datacollectionbot')

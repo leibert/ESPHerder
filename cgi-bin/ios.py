@@ -44,7 +44,7 @@ responsestr = ""
 
 if "mode" in cgiinput:  # mode/funciton selection
     # print "mode exists" + cgiinput.getvalue("mode")
-    if cgiinput.getvalue("mode") == 'init':  #init all ESPs
+    if cgiinput.getvalue("mode") == 'initscanner':  #init all ESPs
         # print "in init sequence, going to poll each ESP I know about"
         responsestr = '{"ESPDB":[{"espid":"IOSMASTER"}'
         for IP in ESPs.initIPs:
