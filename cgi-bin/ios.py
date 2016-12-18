@@ -115,7 +115,7 @@ if "mode" in cgiinput:  # mode/funciton selection
                 # print "<br>getting data from"+IP
                 url = 'http://' + IP + "/?init"
                 # print url
-                urlresponse = urllib.urlopen(url)
+                urlresponse = urllib2.urlopen(url)
                 urlresponse = urlresponse.read()
                 # print urlresponse
                 # data = ast.literal_eval(urlresponse)
@@ -135,7 +135,7 @@ if "mode" in cgiinput:  # mode/funciton selection
             # print "<br>getting data from"+IP
             url = "http://" + IP + "/?CH=" + CH + "&ACTION=" + action
             print url
-            urlresponse = urllib.urlopen(url)
+            urlresponse = urllib2.urlopen(url)
             urlresponse = urlresponse.read()
             print urlresponse
         except:

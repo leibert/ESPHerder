@@ -41,6 +41,7 @@ function digitalcontrollerUIblock(ip, ch) {
 }
 
 function RGBcontrollerUIblock(ip, ch) {
+    window.console.log("adding RGB");
     html = "<BR>" +
         "<a href='javascript:void(0)' class='btn green' onclick='ON(\"" + ip + "\",\"" + ch + "\")'>CLICK TO TURN LIGHTS</a>" +
         "<a href='javascript:void(0)' class='btn red' onclick='OFF(\"" + ip + "\",\"" + ch + "\")'>CLICK TO TURN LIGHTS OFF</a>" +

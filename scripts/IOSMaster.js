@@ -36,6 +36,7 @@ function buildUI(data) {
     addOverlordFunctions();
 
     $('#panel').html(UIhtml);
+    $('#fallback').hide();
     finalizeClientJS();
 
 }
@@ -54,37 +55,49 @@ function addESPchannel(chobj, espid, chid) {
     //now figure out what it is
     addUIelement(chobj.type, espid, chobj.CH);
 
-
 }
 
 function addUIelement(type, espid, chid) {
-    if (type == "SWITCH") {
-        window.console.log("SWITCH");
-         UIhtml +=
-            "<BR>"+
-            "<a href='#' class='btn green' onclick='ON(\""+espid + "\",\"" + chid + "\")'>CLICK TO TURN LIGHTS</a>"+
-            "<a href='#' class='btn red' onclick='OFF(\"" + espid + "\",\"" + chid + "\")'>CLICK TO TURN LIGHTS OFF</a>"+
-            "<BR><BR>"
+    switch(type){
+        case "DIGITAL":
+            UIhtml+= digitalcontrollerUIblock(espid,chid);
+            break;
 
+        case "DIMLIGHT":
+            UIhtml+= singlePWMcontrollerUIblock(espid,chid);
+            break;
 
+        case "RGB":
+            UIhtml+= RGBcontrollerUIblock(espid,chid);
+            break;
     }
-    else if (type == "DIMLIGHT") {
-        window.console.log("DIMMER LIGHT");
-    }
-    else if (type == "RGB") {
-        window.console.log("RGB controller");
-        UIhtml +=
-            "<BR>"+
-            "<a href='#' class='btn green' onclick='ON(\""+espid + "\",\"" + chid + "\")'>CLICK TO TURN LIGHTS</a>"+
-            "<br><a href='#' class='btn red' onclick='OFF(\"" + espid + "\",\"" + chid + "\")'>CLICK TO TURN LIGHTS OFF</a>"+
-            "<BR><BR>"+
-            "<input type='range' onchange='RedLightDIM(this.value,\"" + espid + "\",\"" + chid + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
-            "<BR><BR>"+
-            "<input type='range' onchange='BlueLightDIM(this.value,\"" + espid + "\",\"" + chid + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
-            "<BR><BR>"+
-            "<input type='range' onchange='GreenLightDIM(this.value,\"" + espid + "\",\"" + chid + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
-            "<BR><BR>";
-    }
+//    if (type == "SWITCH") {
+//        window.console.log("SWITCH");
+//         UIhtml +=
+//            "<BR>"+
+//            "<a href='#' class='btn green' onclick='ON(\""+espid + "\",\"" + chid + "\")'>CLICK TO TURN LIGHTS</a>"+
+//            "<a href='#' class='btn red' onclick='OFF(\"" + espid + "\",\"" + chid + "\")'>CLICK TO TURN LIGHTS OFF</a>"+
+//            "<BR><BR>"
+//
+//
+//    }
+//    else if (type == "DIMLIGHT") {
+//        window.console.log("DIMMER LIGHT");
+//    }
+//    else if (type == "RGB") {
+//        window.console.log("RGB controller");
+//        UIhtml +=
+//            "<BR>"+
+//            "<a href='#' class='btn green' onclick='ON(\""+espid + "\",\"" + chid + "\")'>CLICK TO TURN LIGHTS</a>"+
+//            "<br><a href='#' class='btn red' onclick='OFF(\"" + espid + "\",\"" + chid + "\")'>CLICK TO TURN LIGHTS OFF</a>"+
+//            "<BR><BR>"+
+//            "<input type='range' onchange='RedLightDIM(this.value,\"" + espid + "\",\"" + chid + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
+//            "<BR><BR>"+
+//            "<input type='range' onchange='BlueLightDIM(this.value,\"" + espid + "\",\"" + chid + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
+//            "<BR><BR>"+
+//            "<input type='range' onchange='GreenLightDIM(this.value,\"" + espid + "\",\"" + chid + "\")' min='10' max = '99' style='height: 50px' value='50'>"+
+//            "<BR><BR>";
+//    }
 }
 
 function addOverlordFunctions(){
@@ -191,6 +204,5 @@ var re = new RegExp(/^.*\//);
 var controlleraddress = re.exec(window.location.href);
 window.console.log("THIS IS" + controlleraddress);
 //}
-
 
 
