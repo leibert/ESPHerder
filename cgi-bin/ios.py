@@ -17,7 +17,7 @@ from time import sleep
 cgitb.enable()
 
 # statesfile='/var/www/html/espserve/CMDCTRL/housestates.dat'
-statesfile='/home/leibert/PycharmProjects/IoSMaster/espserve/CMDCTRL/housestates.dat'
+statesfile='resources/housestates.dat'
 macrofile= 'resources/macros.dat'
 
 

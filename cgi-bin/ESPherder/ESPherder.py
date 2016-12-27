@@ -1,9 +1,14 @@
 __author__ = 'leibert'
 import threading
 import urllib2
+import sys
+# sys.path.append('/var/www/html/cgi-bin/IOS')
+# sys.path.append('/home/leibert/PycharmProjects/IoSMaster/cgi-bin')
+sys.path.append('/home/leibert/GITprojects/IoSMaster/cgi-bin')
+
 from IOSstatemachine.IOSstatemachine import *
 
-statesfile='/home/leibert/PycharmProjects/IoSMaster/espserve/CMDCTRL/housestates.dat'
+statesfile='resources/housestates.dat'
 macrofile= 'resources/macros.dat'
 automationfile= 'resources/automation.dat'
 
@@ -39,15 +44,19 @@ def sendESPcommand(IP, CH, action):
 
 def execCommand(command):
     print "COMMAND IS" + command
-    instr = command.split(',')
-
-    IP = instr[0].strip()
-    CH = instr[1].strip()
-    action = instr[2].strip()
-    # print IP
-    # print CH
-    # print action
-    sendESPcommand(IP, CH, action)
+    if command.startswith("MACRO"):
+        print "this is a macro"
+        macroID=command[5:]
+        runMacro(macroID)
+    else:
+        instr = command.split(',')
+        IP = instr[0].strip()
+        CH = instr[1].strip()
+        action = instr[2].strip()
+        # print IP
+        # print CH
+        # print action
+        sendESPcommand(IP, CH, action)
 
 
 def getMacros():
@@ -77,7 +86,7 @@ def runMacro(macroID):
         print macroID
         macro= d[macroID].split(":")
         print macro
-        print macro
+        # print macro
         commands=macro[2:]
         print commands
         for command in commands:
@@ -86,7 +95,11 @@ def runMacro(macroID):
 
 def runAutomation():
     print "force automation run on state update"
-    print checkAutomation(statesfile,automationfile)
+
+    for command in checkAutomation(statesfile,automationfile):
+        print command
+        execCommand(command)
+
 
 
 
@@ -108,4 +121,4 @@ def minutelychecks():
     #     print "sendESP fail"
 
 
-runAutomation()
+# runAutomation()
