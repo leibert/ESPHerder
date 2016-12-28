@@ -90,6 +90,8 @@ if "mode" in cgiinput:  # mode/funciton selection
         try:
             key = cgiinput.getvalue("KEY")
             value = cgiinput.getvalue("VALUE")
+            print key
+            print value
             updateState(statesfile, key, value)
             runAutomation()
 

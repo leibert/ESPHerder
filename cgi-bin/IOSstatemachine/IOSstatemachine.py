@@ -77,13 +77,19 @@ def writeStates(statedb, dict):
 
 def updateState(statedb, key, value):
     d = readstoredStates(statedb)
+    print "\nupdating"+key
+    print value
     if d is None:
         d = {}
         d[key] = value
         writeStates(statedb, d)
         return
+
+    print "dict exists"
+
     if value == "TS":
         value = str(datetime.datetime.now())
+
 
     # check to see if its a flagged value
     if "#" in d[key]:
