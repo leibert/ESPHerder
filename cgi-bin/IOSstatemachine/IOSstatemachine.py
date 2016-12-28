@@ -55,15 +55,20 @@ def getstoredState(statedb, key):
 
 
 def writeStates(statedb, dict):
+    print "Write states"
+    print statedb
     print dict
+    print "---------\n"
     try:
         f = open(statedb, 'w')
+        print "test"
         # f = open('housestates.dat', 'r')
 
         f.seek(0)
-
+        print "DICT"
         for key,value in dict.iteritems():
-            # print item
+            print "<BR>\n"
+            print item
             print key
             # print dict[key]
             f.write(key + "," + value)
@@ -90,19 +95,24 @@ def updateState(statedb, key, value):
     if value == "TS":
         value = str(datetime.datetime.now())
 
+    print "flag check"
 
-    # check to see if its a flagged value
-    if "#" in d[key]:
-        unflaggedvalue = d[key][:d[key].index("#")]
-        if(unflaggedvalue!=value):
-            print "different value"
-            d[key] = value #different unflaggedvalue update state
-        else:
-            print "no value change"
-            return #value hasn't changed once flag removed exit funciton
-
+    try:
+        # check to see if its a flagged value
+        if "#" in d[key]:
+            unflaggedvalue = d[key][:d[key].index("#")]
+            if(unflaggedvalue!=value):
+                print "different value"
+                d[key] = value #different unflaggedvalue update state
+            else:
+                print "no value change"
+                return #value hasn't changed once flag removed exit funciton
+    except:
+        print "key doesn't exist create new key"
+        d[key] = value
 
     else:
+        print "unflagged"
         d[key] = value
     # d[key]="None"
     # if (getstoredState(statedb,key)!= value): #don't overwrite state line if no change, there may be flags to indicate state acted upon

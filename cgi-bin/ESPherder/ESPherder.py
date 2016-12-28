@@ -97,7 +97,7 @@ def runAutomation():
     print "force automation run on state update"
 
     for command in checkAutomation(statesfile,automationfile):
-        print command
+        # print command
         execCommand(command)
 
 
