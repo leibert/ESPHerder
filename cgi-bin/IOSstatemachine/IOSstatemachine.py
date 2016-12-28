@@ -68,7 +68,6 @@ def writeStates(statedb, dict):
         print "DICT"
         for key,value in dict.iteritems():
             print "<BR>\n"
-            print item
             print key
             # print dict[key]
             f.write(key + "," + value)
