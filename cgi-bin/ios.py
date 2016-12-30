@@ -9,7 +9,7 @@ import ESPs
 import json
 import os, time, datetime
 from ESPherder.ESPherder import *
-# from IOSstatemachine.IOSstatemachine import *
+from IOSstatemachine.IOSstatemachine import *
 
 from time import sleep
 
@@ -94,7 +94,9 @@ if "mode" in cgiinput:  # mode/funciton selection
             print key
             print value
             updateState(statesfile, key, value)
+            print "<BR>AUTOMATION:"
             runAutomation()
+            print "DONE"
 
 
         except:

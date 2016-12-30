@@ -41,16 +41,30 @@ function digitalcontrollerUIblock(ip, ch) {
 }
 
 function RGBcontrollerUIblock(ip, ch) {
-    window.console.log("adding RGB");
     html = "<BR>" +
         "<a href='javascript:void(0)' class='btn green' onclick='ON(\"" + ip + "\",\"" + ch + "\")'>CLICK TO TURN LIGHTS</a>" +
         "<a href='javascript:void(0)' class='btn red' onclick='OFF(\"" + ip + "\",\"" + ch + "\")'>CLICK TO TURN LIGHTS OFF</a>" +
+        "<BR><BR><BR>"+
+        "<input type='button' value='WHITE' onclick='RGBDIM(\"999999\",\"" + ip + "\",\"" + ch + "\")' style='background-color:#ffffff; color:#000000; padding: 20px;'>"+
+        "<input type='button' value='ORANGE' onclick='RGBDIM(\"999900\",\"" + ip + "\",\"" + ch + "\")' style='background-color:#dd8016; color:#fff; padding: 20px;'>"+
+        "<input type='button' value='__RED__ ' onclick='RGBDIM(\"990000\",\"" + ip + "\",\"" + ch + "\")' style='background-color:#ff0000; color:#fff; padding: 20px;'>"+
+        "<input type='button' value='GREEN' onclick='RGBDIM(\"009900\",\"" + ip + "\",\"" + ch + "\")' style='background-color:#00ff00; color:#fff; padding: 20px;'>"+
+        "<input type='button' value='_BLUE_' onclick='RGBDIM(\"000099\",\"" + ip + "\",\"" + ch + "\")' style='background-color:#0000ff; color:#fff; padding: 20px;'>"+
+        "<input type='button' value='LT BLUE' onclick='RGBDIM(\"009999\",\"" + ip + "\",\"" + ch + "\")' style='background-color:#60c0e0; color:#fff; padding: 20px;'>"+
+        "<input type='button' value='_AQUA_' onclick='RGBDIM(\"009971\",\"" + ip + "\",\"" + ch + "\")' style='background-color:#00ffff; color:#fff; padding: 20px;'>"+
+        "<input type='button' value='PURPLE' onclick='RGBDIM(\"990099\",\"" + ip + "\",\"" + ch + "\")' style='background-color:#60305c; color:#fff; padding: 20px;'>"+
+        "<input type='button' value='_PINK_' onclick='RGBDIM(\"836879\",\"" + ip + "\",\"" + ch + "\")' style='background-color:#e743ef; color:#fff; padding: 20px;'>"+
+        "<input type='button' value='YELLOW' onclick='RGBDIM(\"759900\",\"" + ip + "\",\"" + ch + "\")' style='background-color:#f4fc05; color:#fff; padding: 20px;'>"+
+        "<BR><BR>" +
         "<BR><BR>" +
         "<input type='range' onchange='RedLightDIM(this.value,\"" + ip + "\",\"" + ch + "\")' min='10' max = '99' style='height: 50px' value='50'>" +
         "<BR><BR>" +
         "<input type='range' onchange='GreenLightDIM(this.value,\"" + ip + "\",\"" + ch + "\")' min='10' max = '99' style='height: 50px' value='50'>" +
         "<BR><BR>" +
         "<input type='range' onchange='BlueLightDIM(this.value,\"" + ip + "\",\"" + ch + "\")' min='10' max = '99' style='height: 50px' value='50'>";
+
+
+
     return html
 }
 
@@ -66,7 +80,11 @@ function OFF(espid, chid) {
     espcomm("ACTION=SWITCHOFF", espid, chid);
 }
 function lightsDIM(value, espid, chid) {
-    espcomm(("ACTION=LIGHTDIM." + value), espid, chid);
+    espcomm(("ACTION=RGBDIM." + value), espid, chid);
+}
+
+function RGBDIM(value, espid, chid) {
+    espcomm(("ACTION=RGBDIM." + value), espid, chid);
 }
 
 function RedLightDIM(value, espid, chid) {
