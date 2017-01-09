@@ -49,14 +49,30 @@ def sendESPcommand(IP, CH, action):
 
 def execCommand(command):
     # print "COMMAND IS" + command
+
+    #Allows for comments in file
     if command.startswith("/"):
         print "comment"
         return
 
+    #This command is a Macro (or sequence of commands)
     elif command.startswith("MACRO"):
         print "this is a macro"
         macroID=command[5:]
         runMacro(macroID)
+
+    #This checks to see if another state is true or false. For example, were particular lights turned on manually. You may not want a time or motion based event to override that
+    elif command.statswith("?X"):
+        print "this is a statechecker"
+        statekey=command[2:]
+        if(getstoredState(statesfile,statekey)=="true"):
+            print "This macro is locked out by another state being true"
+            return
+
+
+    #Flags the value of a variable. The flag is used to denote the macro has been executed based on the value being checked by the automation script.
+    #This prevents the automation scripting to repeatedly send out commands or if a sensor, light a motion sensor, has been repeatedly tripped within a short amount of time.
+    #A time based delay can unflag this
 
     elif command.startswith("FLAG"):
         print "flag variable"
@@ -65,6 +81,7 @@ def execCommand(command):
         print key + " with " + flag+"\n<BR>"
         flagState(statesfile,key,flag)
 
+    #unflag variable
     elif command.startswith("UNFLAG"):
         print "UNflag variable"
         flag=command[6:]
@@ -72,6 +89,7 @@ def execCommand(command):
         print key + " with " + flag
         unflagState(statesfile,key)
 
+    #Adds a command to the delay file. For example you could execute a macro (or ESP command) to turn off lights in a set time period (half hour later)
     elif command.startswith("DELAY"):
         print "DELAY"
         length=command[5:command.index("@")]
@@ -79,6 +97,7 @@ def execCommand(command):
         commands=command[command.index("#")+1:]
         addDelay(delayfile,key,length,commands)
 
+    #nothing special, so just split the command into IP address, channel, and the action and pass it along
     else:
         instr = command.split(',')
         IP = instr[0].strip()
