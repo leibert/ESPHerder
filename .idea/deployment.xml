@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="RPI">
+  <component name="PublishConfigData" autoUpload="Always" serverName="RPI remote">
     <serverData>
       <paths name="RPI">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/IOS" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/cgi-bin/IOS/" local="$PROJECT_DIR$/cgi-bin" web="/cgi-bin/IOS" />
+            <mapping deploy="/espserve" local="$PROJECT_DIR$/espserve" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="RPI remote">
         <serverdata>
           <mappings>
             <mapping deploy="/IOS" local="$PROJECT_DIR$" web="/" />

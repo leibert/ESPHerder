@@ -86,6 +86,11 @@ if "mode" in cgiinput:  # mode/funciton selection
         d = getMacros()
         responsestr = json.dumps(d)
 
+    elif cgiinput.getvalue("mode") == 'loadroutineheaders':
+        # print "load macros"
+        d = getRoutineHeaders()
+        responsestr = json.dumps(d)
+
     elif cgiinput.getvalue("mode") == 'updstate':
         print "update state"
         try:
@@ -112,6 +117,12 @@ if "mode" in cgiinput:  # mode/funciton selection
         macroID = cgiinput.getvalue("macroID")
         runMacro(macroID)
 
+    elif cgiinput.getvalue("mode") == 'execroutine':
+        # print "load macros"
+
+        routineID = cgiinput.getvalue("routineID")
+        steptime = int(cgiinput.getvalue("steptime"))
+        runRoutine(routineID,steptime)
 
 
 
@@ -120,67 +131,15 @@ if "mode" in cgiinput:  # mode/funciton selection
         print "yikes, lets try this"
         # write a file with a timestamp, serves as lock file
 
-        lockfile = open("locker.txt", 'w')
-        lockedat = str(time.time())
-        lockfile.write(lockedat)
-        lockfile.close()
-        locked = True
-        print locked
         steptime = int(cgiinput.getvalue("steptime"))
         batch = cgiinput.getvalue("commands")
         commands = batch.split(';')
         loopflag = False
 
-        while (locked):
-            for command in commands:
-                print command
-                lcheck = open("locker.txt", 'r')
-                lcheck.seek(0)
-                checkstamp = lcheck.readline()
-                lcheck.close()
-
-                if not checkstamp.startswith(lockedat):
-                    print "NOTLOCKED"
-                    locked = False
-                    break
-
-                elif 'zzzz' in command:
-                    print "sleep"
-                    sleep(steptime / 1000)
-
-                elif 'llll' in command:
-                    print "we're looping"
-                    loopflag = True
-
-                elif command == "":
-                    print "empty"
-
-                else:  #do something here
-                    execCommand(command)
-
-
-            if not loopflag:
-                locked = False
-                break
+        runBatch(commands,steptime)
 
 
 
-
-
-
-
-
-
-                # print action
-                # try:
-                #     # print "<br>getting data from"+IP
-                #     url = "http://" + IP + "/?CH=" + CH+"&ACTION="+action
-                #     print url
-                #     urlresponse = urllib.urlopen(url)
-                #     urlresponse = urlresponse.read()
-                #     print urlresponse
-                # except:
-                #     False
 
 # else:
 #     GET WORLD VIEW

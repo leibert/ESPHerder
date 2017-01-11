@@ -1,17 +1,17 @@
 /**
  * Created by leibert on 12/4/16.
  */
-function loadDashboard(){
+function loadMacros(){
     $.ajax({
         type: "GET",
         url: appPath + '?mode=loadmacros',//get ESP Database
-        success: buildDashboard //send database to UI builder
+        success: buildMacros //send database to UI builder
 
     });
 
 }
 
-function buildDashboard(result){
+function buildMacros(result){
     window.console.log("Building Dashboard");
     window.console.log(result);
     UIhtml = "<center><h2>AVAILABLE MACROS:</h2><BR>";
@@ -37,15 +37,65 @@ function buildDashboard(result){
     $('#panel').html(UIhtml);
 }
 
-function execMacro(macroID){
-        window.console.log("Running Macro"+macroID);
+function loadRoutines(){
+    $.ajax({
+        type: "GET",
+        url: appPath + '?mode=loadroutineheaders',//get ESP Database
+        success: buildRoutines //send database to UI builder
+
+    });
+
+}
+
+function buildRoutines(result){
+    window.console.log("Building Dashboard");
+    window.console.log(result);
+    UIhtml = "<center><h2>AVAILABLE ROUTINES:</h2><BR>";
+
+    routinejson = jQuery.parseJSON(result);
+    window.console.log(routinejson);
+//    window.console.log(json.ESPDB);
+//    window.console.log("breaking out individual elements");
+//    window.console.log(ESPdb.ESPDB.length);
+    for(var routine in routinejson)
+    {
+        window.console.log(routinejson[routine]);
+        routinedef = routinejson[routine].split(':');
+        UIhtml+=addRoutine(routine, routinedef[0],routinedef[1],routinedef[2]);
+
+
+
+        window.console.log(routinedef);
+        window.console.log(routinejson[routine][2]);
+
+    }
+    UIhtml+="</center>"
+    $('#fallback').hide();
+    $('#panel').html(UIhtml);
+}
+
+
+function execRoutine(routineID,steptime){
+        window.console.log("Running Routine"+routineID);
         $.ajax({
         type: "POST",
-        url: appPath + '?mode=execmacro&macroID='+macroID,//get ESP Database
+        url: appPath + '?mode=execroutine&routineID='+routineID+'&steptime='+steptime,//get ESP Database
         success: function(data){window.console.log(data);}
 
     });
 
+}
+
+function execMacro(macroID) {
+    window.console.log("Running Macro" + macroID);
+    $.ajax({
+        type: "POST",
+        url: appPath + '?mode=execmacro&macroID=' + macroID,//get ESP Database
+        success: function (data) {
+            window.console.log(data);
+        }
+
+    });
 }
 
 function addMacro(id, type, name){
@@ -55,6 +105,23 @@ function addMacro(id, type, name){
         {
             HTML="<BR><br>" +
                 "<a href='#' class='btn green' onclick='execMacro("+id+")'>"+name+"</a>"+
+                "<BR>";
+
+        }
+            break
+
+    }
+
+    return HTML;
+}
+
+function addRoutine(id, type, name, time){
+    var HTML ="";
+    switch (type){
+        case "BTN":
+        {
+            HTML="<BR><br>" +
+                "<a href='#' class='btn green' onclick='execRoutine("+id+","+time+")'>"+name+"</a>"+
                 "<BR>";
 
         }

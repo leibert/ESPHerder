@@ -1,8 +1,9 @@
 __author__ = 'leibert'
 import threading
 import urllib2
-import sys
+import sys, time, datetime
 import argparse
+from time import sleep
 sys.path.append('/var/www/html/cgi-bin/IOS')
 
 # sys.path.append('/home/leibert/PycharmProjects/IoSMaster/cgi-bin')
@@ -12,6 +13,7 @@ from IOSstatemachine.IOSstatemachine import *
 
 statesfile='/var/www/html/cgi-bin/IOS/resources/housestates.dat'
 macrofile= '/var/www/html/cgi-bin/IOS/resources/macros.dat'
+routinefile= '/var/www/html/cgi-bin/IOS/resources/routines.dat'
 delayfile= '/var/www/html/cgi-bin/IOS/resources/delaytracking.dat'
 automationfile= '/var/www/html/cgi-bin/IOS/resources/automation.dat'
 
@@ -48,12 +50,19 @@ def sendESPcommand(IP, CH, action):
 
 
 def execCommand(command):
-    # print "COMMAND IS" + command
 
     #Allows for comments in file
     if command.startswith("/"):
         print "comment"
-        return
+        return False
+
+    #Update state with value.
+    elif command.startswith("STATE"):
+        print "set a state"
+        key=command[5:command.index("#")].strip()
+        value=command[command.index("#")+1:].strip()
+        updateState(statesfile,key,value)
+
 
     #This command is a Macro (or sequence of commands)
     elif command.startswith("MACRO"):
@@ -62,12 +71,14 @@ def execCommand(command):
         runMacro(macroID)
 
     #This checks to see if another state is true or false. For example, were particular lights turned on manually. You may not want a time or motion based event to override that
-    elif command.statswith("?X"):
+    elif command.startswith("?X"):
         print "this is a statechecker"
         statekey=command[2:]
+        sys.stderr.write("key is\n"+ statekey)
+
         if(getstoredState(statesfile,statekey)=="true"):
             print "This macro is locked out by another state being true"
-            return
+            return False
 
 
     #Flags the value of a variable. The flag is used to denote the macro has been executed based on the value being checked by the automation script.
@@ -107,6 +118,7 @@ def execCommand(command):
         # print CH
         # print action
         sendESPcommand(IP, CH, action)
+    return True
 
 
 def getMacros():
@@ -124,6 +136,86 @@ def getMacros():
                 # print key
                 # print val
                 d[key] = val
+                sys.stderr.write("macro "+ key)
+                # print key
+                # print val
+    except:
+        False
+    return d
+
+
+def getRoutine(routineID):
+    # print "getMacros"
+    sys.stderr.write("get routines")
+
+    routineholder = []
+    try:
+        # print "trying"
+        sys.stderr.write("TRYING")
+        with open(routinefile, 'r') as routines:
+            sys.stderr.write("FILE OPENED")
+            sys.stderr.write(routinefile)
+
+            readingroutine=False
+            routineheader=""
+            for line in routines:
+                # sys.stderr.write(line)
+                if line.startswith("ROUTINE,"+routineID+","):#Routin found
+                    # sys.stderr.write(line)
+                    routineheader=line[line.index("ROUTINE")+8:]
+                    (key,routineheader)=routineheader.split(",",1)
+                    readingroutine=True
+
+                elif line.startswith("EOR"):
+                    readingroutine=False
+
+                elif readingroutine:
+                    routineholder.append(line) #ADD line from routine to array
+
+    except:
+        False
+    return routineholder
+
+
+
+def getRoutineHeaders():
+    # print "getMacros"
+    sys.stderr.write("get routines")
+
+    d = {}
+    try:
+        # print "trying"
+        sys.stderr.write("TRYING")
+        with open(routinefile, 'r') as routines:
+            sys.stderr.write("FILE OPENED")
+            sys.stderr.write(routinefile)
+
+            routineholder=""
+            routineheader=""
+            for line in routines:
+                # sys.stderr.write(line)
+                if line.startswith("ROUTINE"):#This is the start of a new routine
+                    sys.stderr.write(line)
+                    routineheader=line[line.index("ROUTINE")+8:]
+                    (key,routineheader)=routineheader.split(",",1)
+                    # sys.stderr.write(routineheader)
+
+                    # (key,value)=line[routineheader.index("ROUTINE,"+1):].split(",",1)
+                    # key=routineheader[routineheader.index("ROUTINE,"+1):routineheader.index(",")]
+                    # value=line.rsplit(",",3)
+                    # sys.stderr.write("routine"+key+"@"+value)
+                    d[key]=routineheader
+                #     routineheader=line
+                #
+                # # print line
+                # # print "<BR>"
+                # header = routine.split(':',3)
+                # key=header[1].split(',',1)
+                # val=header[1].rsplit(',',1)+header[2]+header[3]
+                # sys.stderr.write("routine"+key+"@"+val)
+                #
+                # # print val
+                # d[key] = val
                 # print key
                 # print val
     except:
@@ -142,7 +234,75 @@ def runMacro(macroID):
         print commands
         for command in commands:
             # print command +"<BR>"
-            execCommand(command)
+            if execCommand(command) == False:
+                break
+
+def runRoutine(routineID,steptime):
+        # headers = getRoutineHeaders()
+        d = getRoutine(routineID)
+        # header=headers[routineID]
+        # header=header.split(",")
+        # print macroID
+        # runBatch(d,header[2])
+        # macro= d[macroID].split(":")
+        runBatch(routineID,steptime)
+
+        # print macro
+        # print "<BR>COMMAND SET<BR>"
+        # commands=macro[2:]
+        # print commands
+        # for command in commands:
+        #     # print command +"<BR>"
+        #     if execCommand(command) == False:
+        #         break
+
+def runBatch(batch,steptime):
+
+        lockfile = open("locker.txt", 'w')
+        lockedat = str(time.time())
+        lockfile.write(lockedat)
+        lockfile.close()
+        locked = True
+        print locked
+
+        print "yikes, lets try this"
+        # write a file with a timestamp, serves as lock file
+
+        loopflag = False
+
+        while (locked):
+            for command in batch:
+                print command
+                lcheck = open("locker.txt", 'r')
+                lcheck.seek(0)
+                checkstamp = lcheck.readline()
+                lcheck.close()
+
+                if not checkstamp.startswith(lockedat):
+                    print "NOTLOCKED"
+                    locked = False
+                    break
+
+                elif 'zzzz' in command:
+                    if command[4:]!='': #is a sleep value defined?
+                        sleep(int(command[4:]))
+                    else: #use default sleep
+                        sleep(steptime / 1000)
+
+                elif 'llll' in command:
+                    print "we're looping"
+                    loopflag = True
+
+                elif command == "":
+                    print "empty"
+
+                else:  #do something here
+                    execCommand(command)
+
+
+            if not loopflag:
+                locked = False
+                break
 
 
 def runAutomation():
